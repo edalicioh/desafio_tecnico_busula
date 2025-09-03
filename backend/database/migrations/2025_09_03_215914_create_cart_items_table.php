@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('cart_id')->constrained('carts');
+            $table->foreignId('product_id')->constrained('products');
+            $table->integer('quantity')->default(1);
+            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
     }

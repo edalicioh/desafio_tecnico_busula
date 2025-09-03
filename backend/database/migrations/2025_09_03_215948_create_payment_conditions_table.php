@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('payment_conditions', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->integer('installments')->default(1);
+            $table->decimal('discount', 5, 2)->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
