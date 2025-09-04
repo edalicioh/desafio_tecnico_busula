@@ -17,7 +17,9 @@ class PaymentConditionsFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->randomElement(['Immediate Payment', '30 Days', '60 Days', '90 Days', 'Installment Plan']),
+            'installments' => fake()->randomElement([1, 3, 6, 12]),
+            'discount' => fake()->randomFloat(2, 0, 10),
         ];
     }
 }
