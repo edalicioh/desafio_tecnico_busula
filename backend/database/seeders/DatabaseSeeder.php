@@ -13,11 +13,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // First, seed the independent entities
+        $this->call([
+            CategoriesSeeder::class,
+            PaymentMethodsSeeder::class,
+            PaymentConditionsSeeder::class,
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Then seed products which depend on categories
+        $this->call(ProductsSeeder::class);
+
+        // Create a test user if one doesn't exist
+        if (User::count() == 0) {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+            ]);
+        }
+
+        // Seed the cart-related entities
+        $this->call([
+            CartsSeeder::class,
+            CartItemsSeeder::class,
+            OrdersSeeder::class,
         ]);
     }
 }
