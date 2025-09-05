@@ -11,6 +11,11 @@ class CartItem extends Model
     /** @use HasFactory<\Database\Factories\CartItemsFactory> */
     use HasFactory;
 
+
+    protected $casts = [
+        'quantity' => 'integer',
+        'subtotal' => 'decimal:2',
+    ];
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);

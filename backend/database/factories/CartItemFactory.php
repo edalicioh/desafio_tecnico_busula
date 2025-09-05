@@ -19,12 +19,12 @@ class CartItemFactory extends Factory
     public function definition(): array
     {
         // Create a product first to get its price
-        $product = Product::factory()->create();
+        $product = Product::all()->random();
         $quantity = fake()->numberBetween(1, 5);
         $subtotal = $product->price * $quantity;
 
         return [
-            'cart_id' => Cart::factory(),
+            'cart_id' => Cart::all()->random()->id,
             'product_id' => $product->id,
             'quantity' => $quantity,
             'subtotal' => $subtotal,

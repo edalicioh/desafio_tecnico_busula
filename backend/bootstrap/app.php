@@ -26,7 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
 
-        //
+        $middleware->validateCsrfTokens(except: [
+            'api/v1/cart',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

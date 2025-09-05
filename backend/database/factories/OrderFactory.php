@@ -19,8 +19,8 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'cart_id' => Cart::factory(),
-            'payment_method_id' => PaymentMethod::factory(),
+            'cart_id' => Cart::all()->random()->id,
+            'payment_method_id' => PaymentMethod::all()->random()->id,
             'total' => fake()->randomFloat(2, 50, 500),
             'status' => fake()->randomElement(['PENDING', 'PAID', 'CANCELED']),
         ];
