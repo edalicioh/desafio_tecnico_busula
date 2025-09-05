@@ -16,7 +16,7 @@ class ProductController extends Controller
     {
         return ProductResource::collection(Product
             ::with('category')
-            ->paginate(10)
+            ->paginate(15)
         );
     }
 }

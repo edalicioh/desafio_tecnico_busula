@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\PaymentMethods;
+use App\Models\Cart;
 
-class PaymentMethodsSeeder extends Seeder
+class CartSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        PaymentMethods::factory()->count(5)->create();
+        Cart::factory()->count(10)->create();
     }
 }

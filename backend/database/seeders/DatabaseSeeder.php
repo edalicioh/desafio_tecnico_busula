@@ -15,13 +15,13 @@ class DatabaseSeeder extends Seeder
     {
         // First, seed the independent entities
         $this->call([
-            CategoriesSeeder::class,
-            PaymentMethodsSeeder::class,
-            PaymentConditionsSeeder::class,
+            CategorySeeder::class,
+            PaymentMethodSeeder::class,
+            PaymentConditionSeeder::class,
         ]);
 
         // Then seed products which depend on categories
-        $this->call(ProductsSeeder::class);
+        $this->call(ProductSeeder::class);
 
         // Create a test user if one doesn't exist
         if (User::count() == 0) {
@@ -33,9 +33,9 @@ class DatabaseSeeder extends Seeder
 
         // Seed the cart-related entities
         $this->call([
-            CartsSeeder::class,
-            CartItemsSeeder::class,
-            OrdersSeeder::class,
+            CartSeeder::class,
+            CartItemSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

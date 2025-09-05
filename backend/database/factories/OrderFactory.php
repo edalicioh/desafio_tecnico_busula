@@ -3,13 +3,13 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Carts;
-use App\Models\PaymentMethods;
+use App\Models\Cart;
+use App\Models\PaymentMethod;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Orders>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
  */
-class OrdersFactory extends Factory
+class OrderFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +19,8 @@ class OrdersFactory extends Factory
     public function definition(): array
     {
         return [
-            'cart_id' => Carts::factory(),
-            'payment_method_id' => PaymentMethods::factory(),
+            'cart_id' => Cart::factory(),
+            'payment_method_id' => PaymentMethod::factory(),
             'total' => fake()->randomFloat(2, 50, 500),
             'status' => fake()->randomElement(['PENDING', 'PAID', 'CANCELED']),
         ];

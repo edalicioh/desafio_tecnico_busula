@@ -3,13 +3,13 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Carts;
+use App\Models\Cart;
 use App\Models\Product;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CartItems>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CartItem>
  */
-class CartItemsFactory extends Factory
+class CartItemFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -24,7 +24,7 @@ class CartItemsFactory extends Factory
         $subtotal = $product->price * $quantity;
 
         return [
-            'cart_id' => Carts::factory(),
+            'cart_id' => Cart::factory(),
             'product_id' => $product->id,
             'quantity' => $quantity,
             'subtotal' => $subtotal,
