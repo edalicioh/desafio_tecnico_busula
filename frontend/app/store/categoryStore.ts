@@ -1,13 +1,14 @@
+import type { Category } from "~/types/category";
 
 
 export const useCategoryStore = defineStore('categoryStore', {
 
   state: () => ({
-    categories: [] as string[],
+    categories: [] as Category[],
   }),
 
   actions: {
-    setCategories(categories: string[]) {
+    setCategories(categories: Category[]) {
       this.categories = categories;
     },
 
@@ -16,9 +17,9 @@ export const useCategoryStore = defineStore('categoryStore', {
       const { $api } = useNuxtApp();
       try {
         const response = await $api.get('/api/v1/categories');
-        const categories = response.data.data.map((category: any) => category.name);
+        const categories = response.data.data;
         console.log(categories);
-        this.setCategories(['All', ...categories]);
+        this.setCategories([{id: 0 , name: 'All'}, ...categories]);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }

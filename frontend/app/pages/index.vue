@@ -18,11 +18,13 @@ import Footer from '../components/Footer.vue'
 import type { Product } from '../types/product'
 import { useCategoryStore } from '../store/categoryStore'
 import { useProductStore } from '../store/productStore'
+import { useCartStore } from '../store/cartStore'
 
 const pageTitle = ref('All Products')
 
 const categoryStore = useCategoryStore()
 const productStore = useProductStore()
+const cartStore = useCartStore()
 
 const categories = computed(() => categoryStore.categories)
 const products = computed(() => productStore.products)
@@ -30,6 +32,7 @@ const products = computed(() => productStore.products)
 onMounted(async () => {
   await categoryStore.fetchCategories()
   await productStore.fetchProducts()
+  await cartStore.getCart()
 })
 
 const selectedCategory = ref('All')
@@ -38,7 +41,7 @@ const filteredProducts = computed(() => {
   if (selectedCategory.value === 'All') {
     return products.value
   }
-  return products.value.filter((product: Product) => product.category === selectedCategory.value)
+  return products.value.filter((product: Product) => product.category.name === selectedCategory.value)
 })
 
 const handleCategoryChange = (category: { label: string }) => {
@@ -46,6 +49,6 @@ const handleCategoryChange = (category: { label: string }) => {
 }
 
 const handleAddToCart = (product: Product) => {
-  console.log('Added to cart:', product)
+ cartStore.addItemToCart(product)
 }
 </script>
