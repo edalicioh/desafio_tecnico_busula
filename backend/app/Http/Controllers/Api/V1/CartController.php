@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartResource;
@@ -42,8 +42,6 @@ class CartController extends Controller
         }
 
         $cart->items()->delete();
-
-
 
         $total = 0;
 
