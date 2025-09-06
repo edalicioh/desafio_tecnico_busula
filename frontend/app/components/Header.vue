@@ -8,17 +8,26 @@
         <span class="self-center whitespace-nowrap text-xl font-semibold">Busula Store</span>
       </NuxtLink>
       <div class="mt-2 sm:mt-0 sm:flex md:order-2">
-        <UButton color="primary" variant="outline" class="md:ml-3">
+        <UButton color="primary" variant="outline" class="md:ml-3" @click="openCartDrawer">
           <UIcon name="i-heroicons-shopping-cart" class="h-5 w-5" />
           <span class="ml-2 hidden md:inline">Cart</span>
         </UButton>
       </div>
     </UContainer>
   </header>
+  <CartDrawer ref="cartDrawer" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import CartDrawer from './CartDrawer.vue'
 
 const isMenuOpen = ref(false)
+const cartDrawer = ref<InstanceType<typeof CartDrawer> | null>(null)
+
+const openCartDrawer = () => {
+  if (cartDrawer.value) {
+    cartDrawer.value.open()
+  }
+}
 </script>

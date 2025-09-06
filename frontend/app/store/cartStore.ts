@@ -92,6 +92,18 @@ export const useCartStore = defineStore('cartStore', {
         clearCart() {
             this.cart = null;
             this.cartItems = [];
+        },
+        async updateItemQuantity(productId: number, quantity: number) {
+            const { $api } = useNuxtApp();
+
+            const item = this.cartItems.find(item => item.id === productId);
+            
+            if (item) {
+                item.quantity = quantity;
+            }
+
+             const response = await $api.post('/api/v1/cart', this.cart)
+            this.setCart(response.data.data);
         }
     }
 

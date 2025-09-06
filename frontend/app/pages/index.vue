@@ -3,7 +3,7 @@
     <Header />
     <ProductTitle :title="pageTitle" />
     <CategoryTabs :categories="categories" @category-change="handleCategoryChange" />
-    <ProductGrid :products="filteredProducts" @add-to-cart="handleAddToCart" />
+    <ProductGrid :products="filteredProducts" />
     <Footer />
   </div>
 </template>
@@ -48,7 +48,4 @@ const handleCategoryChange = (category: { label: string }) => {
   selectedCategory.value = category.label
 }
 
-const handleAddToCart = (product: Product) => {
- cartStore.addItemToCart(product)
-}
 </script>
