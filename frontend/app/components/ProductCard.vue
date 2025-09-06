@@ -23,6 +23,7 @@
     </template>
 
 <script setup lang="ts">
+import { useCartStore } from '~/store/cartStore'
 import type { Product } from '../types/product'
 
 const props = defineProps({
@@ -32,9 +33,10 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['add-to-cart'])
+const cartStore = useCartStore()
 
 const addToCart = () => {
-  emit('add-to-cart', props.product)
+  console.log(props)
+  cartStore.addItemToCart(props.product)
 }
 </script>

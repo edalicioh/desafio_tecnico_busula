@@ -1,86 +1,57 @@
 <template>
-  <UDrawer v-model:open="isDrawerOpen" direction="right" class="w-full sm:w-1/3">
+  <UDrawer v-model:open="isDrawerOpen" direction="right" class="w-full sm:w-1/3 bg-elevated">
     <template #content>
       <div class="p-4 h-full flex flex-col">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-bold">Your Cart</h2>
-          <UButton 
-            @click="isDrawerOpen = false" 
-            variant="ghost" 
-            color="gray"
-            icon="i-heroicons-x-mark"
-          />
+          <h2 class="text-xl font-bold text-default">Your Cart</h2>
+          <UButton @click="isDrawerOpen = false" variant="ghost" color="neutral" icon="i-heroicons-x-mark" />
         </div>
-        
+
         <div v-if="cartStore.cartItems.length === 0" class="text-center py-8 flex-1 flex flex-col justify-center">
-          <UIcon name="i-heroicons-shopping-cart" class="mx-auto h-12 w-12 text-gray-400" />
-          <p class="mt-2 text-sm text-gray-500">Your cart is empty</p>
+          <UIcon name="i-heroicons-shopping-cart" class="mx-auto h-6 w-6 text-muted" />
+          <p class="mt-2 text-sm text-muted">Your cart is empty</p>
         </div>
-        
+
         <div v-else class="flex-1 overflow-y-auto">
-          <div 
-            v-for="item in cartItemsWithProducts" 
-            :key="item.id"
-            class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start"
-          >
-            <img 
-              :src="item.product.image" 
-              :alt="item.product.name" 
-              class="w-full rounded-lg sm:w-40" 
-            />
-            <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-              <div class="mt-5 sm:mt-0">
-                <h2 class="text-lg font-bold text-gray-900">{{ item.product.name }}</h2>
-                <p class="mt-1 text-xs text-gray-700">{{ item.product.category.name }}</p>
-              </div>
-              <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                <div class="flex items-center border-gray-100">
-                  <span 
-                    class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
-                    @click="decreaseQuantity(item.id)"
-                  > - </span>
-                  <input
-                    class="h-8 w-8 border bg-white text-center text-xs outline-none"
-                    type="number"
-                    :value="item.quantity"
-                    min="1"
-                    readonly
-                  />
-                  <span 
-                    class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
-                    @click="increaseQuantity(item.id)"
-                  > + </span>
+          <UCard v-for="item in cartItemsWithProducts" :key="item.id" class="mb-6"
+            :ui="{ body: { padding: 'p-4' } }">
+            <div class="flex sm:w-full sm:justify-between flex-col">
+
+              <UTooltip :text="item.product.name" :popper="{ placement: 'top' }">
+                <h2
+                  class="text-lg font-bold text-default truncate whitespace-nowrap overflow-hidden max-w-[200px] cursor-help"
+                >
+                  {{ item.product.name }}
+                </h2>
+              </UTooltip>
+
+              <div class="flex  justify-between mt-2 items-center">
+                  <p class="text-sm text-default mt-2 sm:mt-0">${{ (parseFloat(item.product.price) *
+                    item.quantity).toFixed(2) }}
+                  </p>
+                <div class="flex items-center mt-4 sm:mt-0 max-w-1/2 gap-0.5">
+                  <UButton icon="i-heroicons-minus" size="md" color="primary" variant="solid"
+                    @click="decreaseQuantity(item.id)" :ui="{ rounded: 'rounded-l-full' }" />
+                  <UInput :model-value="item.quantity" type="number" min="1" readonly
+                    input-class="h-8 w-  text-center text-xs"
+                    :ui="{ wrapper: 'relative', base: 'relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0', input: 'block w-full rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-primary-500 dark:focus:ring-primary-400 text-sm' }" />
+                  <UButton icon="i-heroicons-plus" size="md" color="primary" variant="solid"
+                    @click="increaseQuantity(item.id)" :ui="{ rounded: 'rounded-r-full' }" />
                 </div>
-                <div class="flex items-center space-x-4">
-                  <p class="text-sm">${{ (parseFloat(item.product.price) * item.quantity).toFixed(2) }}</p>
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke-width="1.5" 
-                    stroke="currentColor" 
-                    class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
-                    @click="removeItem(item.id)"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
+
               </div>
             </div>
-          </div>
+          </UCard>
         </div>
-        
-        <div class="border-t pt-4 mt-4">
-          <div class="flex justify-between text-lg font-bold mb-4">
+
+        <div class="border-t border-muted pt-4 mt-4">
+          <div class="flex justify-between text-lg font-bold mb-4 text-default">
             <span>Total:</span>
             <span>${{ cartTotal.toFixed(2) }}</span>
           </div>
-          <UButton 
-            class="w-full" 
-            color="primary"
-            @click="checkout"
-          >
-            Proceed to Checkout
+          <UButton class="w-full flex items-center justify-center" color="primary" @click="checkout">
+            <UIcon name="i-heroicons-shopping-cart" class="h-5 w-5" />
+            <span class="ml-2">Proceed to Checkout</span>
           </UButton>
         </div>
       </div>
