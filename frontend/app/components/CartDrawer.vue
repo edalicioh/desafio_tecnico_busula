@@ -109,10 +109,6 @@ const decreaseQuantity = (productId: number) => {
   }
 };
 
-const removeItem = (productId: number) => {
-  cartStore.removeItemFromCart(productId);
-};
-
 const checkout = () => {
   isDrawerOpen.value = false;
   router.push('/checkout');

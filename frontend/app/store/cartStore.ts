@@ -14,6 +14,7 @@ export const useCartStore = defineStore('cartStore', {
       return {
         id: null,
         status: 'OPEN',
+        sessionId: sessionId || null,
         userId: sessionId || null,
         total: 0,
         items: [],
@@ -129,5 +130,21 @@ export const useCartStore = defineStore('cartStore', {
         console.error('Erro ao atualizar quantidade:', error)
       }
     },
+    async recalculateTotal(conditionId: number, installments: number) {
+      if (!this.cart) return
+
+      try {
+        const { $api } = useNuxtApp()
+        const response = await $api.post('/api/v1/cart/recalculate', {
+          sessionId: this.cart.sessionId,
+          conditionId,
+          installments,
+        })
+        this.setCart(response.data.data)
+      } catch (error) {
+        console.error('Erro ao recalcular o total do carrinho:', error)
+      }
+    },
   },
+
 })
