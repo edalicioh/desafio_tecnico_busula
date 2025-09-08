@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('session_id')->nullable();
+            $table->uuid('session_id')->nullable();
             $table->enum('status', ['OPEN', 'CHECKOUT', 'CANCELED'])->default('OPEN');
+            $table->decimal('total', 10, 2)->default(0);
             $table->timestamps();
         });
     }

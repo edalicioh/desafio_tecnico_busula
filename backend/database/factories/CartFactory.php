@@ -19,6 +19,7 @@ class CartFactory extends Factory
     {
         return [
             'user_id' => User::all()->random()->id,
+            'session_id' => fake()->uuid(),
             'status' => fake()->randomElement(['OPEN', 'CHECKOUT', 'CANCELED']),
         ];
     }

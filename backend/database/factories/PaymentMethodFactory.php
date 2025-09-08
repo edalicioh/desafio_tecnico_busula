@@ -17,7 +17,7 @@ class PaymentMethodFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->randomElement(['Credit Card', 'Debit Card', 'PayPal', 'Bank Transfer', 'Cash']),
+            'name' => fake()->randomElement(['Credit Card', 'Debit Card', 'Pix']),
         ];
     }
 }
