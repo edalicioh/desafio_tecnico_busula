@@ -22,6 +22,7 @@ class CartController extends Controller
     {
         try {
             $cart = Cart::query()
+                ->where('status', 'OPEN' )
                 ->where(function ($query) use ($sessionId) {
                     $query->where('user_id', Auth::id())
                         ->orWhere('session_id', $sessionId);
@@ -48,7 +49,7 @@ class CartController extends Controller
     {
         try {
             $user = Auth::user();
-            $sessionId = $request->input('session_id');
+            $sessionId = $request->input('sessionId');
 
             if ($user) {
                 $cart = Cart::firstOrCreate(['user_id' => $user->id]);
