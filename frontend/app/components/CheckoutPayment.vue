@@ -76,10 +76,16 @@ const selectPaymentMethod = (methodId: string) => {
   selectedMethod.value = methodId
   const method = store.paymentMethods.filter(pm => pm.name === methodId)[0]
   const condition = store.paymentConditions.filter(pc => pc.payment_method_id == method?.id )[0]
-  cartStore.recalculateTotal(condition?.id! , Number(condition?.installments.split('-')[0] ?? 1) )
+  store.selectedPaymentConditions = {  id: condition?.id!, installments: Number(condition?.installments.split('-')[0] ?? 1)  }
+  
+  cartStore.recalculateTotal( store.selectedPaymentConditions.id, store.selectedPaymentConditions.installments)
+  store.selectedPaymentMethodId = methodId
+
 }
 
 onMounted(() => {
+  const condition = store.paymentConditions[0]
+  store.selectedPaymentConditions = {  id: condition?.id!, installments: Number(condition?.installments.split('-')[0] ?? 1)  }
   selectPaymentMethod(selectedMethod.value)
 })
 </script>

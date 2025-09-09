@@ -15,7 +15,12 @@ export const useCheckoutStore = defineStore('checkoutStore', {
         value: number;
         label: string;
         conditionId: number;
-    }[]
+    }[],
+    selectedPaymentMethodId: null as string | null,
+    selectedPaymentConditions: null as {
+        id: number;
+        installments: number | 1;
+    } | null,
   }),
 
   actions: {

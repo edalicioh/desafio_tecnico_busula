@@ -15,29 +15,19 @@ export const useOrderStore = defineStore('order', {
   }),
   actions: {
 
-    async fetchOrders() {
-      this.loading = true;
-      this.error = null;
-      try {
-        const { data } = await useFetch<Order[]>('/api/v1/orders');
-        if (data.value) {
-          this.orders = data.value;
-        }
-      } catch (error) {
-        this.error = 'Failed to fetch orders';
-      } finally {
-        this.loading = false;
-      }
-    },
+   
 
-    async createOrder(order: Order) {
+    async createOrder(order: { cart_id: number, payment_condition_id: number,installments: number  }) {
       const { $api } = useNuxtApp()
       try {
+        console.log(order)
         const {data} = await $api.post('/api/v1/orders', order)
+        useCookie('session_id').value = null
         return data.data
       } catch (error) {
         return false
       }
     },
+
   },
 });

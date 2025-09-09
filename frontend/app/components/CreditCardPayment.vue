@@ -36,6 +36,7 @@ const onInstallmentChange = (value: number | null) => {
   if (value !== null && value !== undefined) {
     const selectedOption = installmentOptions.value.find(option => option.value === value)
     if (selectedOption) {
+      store.selectedPaymentConditions = { id:selectedOption.conditionId, installments : selectedOption.value}
       cartStore.recalculateTotal(selectedOption.conditionId, selectedOption.value)
     }
   }
