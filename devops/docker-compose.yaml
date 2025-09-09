@@ -1,0 +1,64 @@
+version: "3.8"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data: {}
+  sqlite-data: {}
+
+services:
+  # Laravel Backend Service
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../devops/bin/backend/Dockerfile
+    container_name: laravel-backend
+    env_file:
+      - .env-back
+    ports:
+      - "8001:8000"
+    volumes:
+      - ../backend:/var/www/html
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  # Nuxt Frontend Service
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../devops/bin/frontend/Dockerfile
+    container_name: nuxt-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NUXT_PUBLIC_API_BASE=http://backend:8000
+    volumes:
+      - ../frontend:/app
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  # PostgreSQL Database Service
+  database:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: 'America/Sao_Paulo'
+      PGTZ: 'America/Sao_Paulo'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
