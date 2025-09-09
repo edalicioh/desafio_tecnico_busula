@@ -34,7 +34,7 @@ class CartController extends Controller
                 return response()->json(['message' => 'Cart not found'], 404);
             }
 
-            $cart->total = $cart->items->sum('subtotal');
+            $cart->update(['total' => $cart->items->sum('subtotal')]);
 
             return new CartResource($cart);
         } catch (\Exception $e) {
@@ -48,7 +48,7 @@ class CartController extends Controller
     {
         try {
             $user = Auth::user();
-            $sessionId = $request->input('sessionId');
+            $sessionId = $request->input('session_id');
 
             if ($user) {
                 $cart = Cart::firstOrCreate(['user_id' => $user->id]);
@@ -76,7 +76,7 @@ class CartController extends Controller
                 $total += $subtotalItem;
             }
 
-            $cart['total'] = $total;
+            $cart->update(['total' => $total]);
 
             return new CartResource($cart->load('items.product'));
         } catch (\Exception $e) {
@@ -85,13 +85,21 @@ class CartController extends Controller
         }
     }
 
-    public function recalculate(int $cartId,  Request $request , CartService $cartService): JsonResource|JsonResponse
+    public function recalculate(int $cartId, Request $request, CartService $cartService): JsonResource|JsonResponse
     {
         try {
-            $conditionId = $request->input('conditionId');
-            $installments = $request->input('installments');
+            $validated = $request->validate([
+                'conditionId' => 'required|integer|exists:payment_conditions,id',
+                'installments' => 'nullable|integer|min:1|max:12'
+            ]);
 
-            return new CartResource($cartService->recalculate($conditionId,$installments, $cartId,  ));
+            return new CartResource($cartService->recalculate(
+                $validated['conditionId'],
+                $validated['installments'] ?? 1,
+                $cartId
+            ));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
             logger()->error("Error recalculating cart", ['exception' => $e]);
             return response()->json(['message' => 'Error recalculating cart'], 500);

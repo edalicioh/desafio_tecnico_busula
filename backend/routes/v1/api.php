@@ -10,4 +10,9 @@ Route::get('/payment-methods', V1\PaymentMethodController::class)->name('payment
 Route::get('/payment-conditions', V1\PaymentConditionController::class)->name('payment-conditions.index');
 
 require __DIR__ . '/cart.php';
-require __DIR__ . '/auth.php';
+
+// API Authentication routes
+Route::post('/auth/login', [V1\Auth\ApiAuthController::class, 'login'])->name('api.auth.login');
+Route::post('/auth/logout', [V1\Auth\ApiAuthController::class, 'logout'])->middleware('auth:sanctum')->name('api.auth.logout');
+Route::get('/auth/me', [V1\Auth\ApiAuthController::class, 'me'])->middleware('auth:sanctum')->name('api.auth.me');
+Route::post('/auth/refresh', [V1\Auth\ApiAuthController::class, 'refresh'])->middleware('auth:sanctum')->name('api.auth.refresh');
