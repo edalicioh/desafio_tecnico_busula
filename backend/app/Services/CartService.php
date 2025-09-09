@@ -23,14 +23,13 @@ class CartService
                 break;
             case PaymentMethodEnum::PIX->value:
             case PaymentMethodEnum::DEBIT_CARD->value:
-                $cart->total = $subtotal * (1 - ($paymentCondition->discount / 100));
+                $cart->total = $subtotal * (1 + ($paymentCondition->discount / 100));
                 break;
 
             default:
                 $cart->total = $subtotal;
                 break;
         }
-
 
         $cart->save();
 

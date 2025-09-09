@@ -27,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->validateCsrfTokens(except: [
-            'api/v1/cart',
+            'api/v1/cart/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
