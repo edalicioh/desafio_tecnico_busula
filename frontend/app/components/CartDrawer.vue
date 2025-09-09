@@ -1,5 +1,5 @@
 <template>
-  <UDrawer v-model:open="isDrawerOpen" direction="right" class="w-full sm:w-1/3 bg-elevated">
+  <UDrawer v-model:open="isDrawerOpen" direction="right" class="w-full sm:w-1/3 bg-elevated" title="Your Cart">
     <template #content>
       <div class="p-4 h-full flex flex-col">
         <div class="flex justify-between items-center mb-6">

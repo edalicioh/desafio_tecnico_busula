@@ -8,7 +8,7 @@
           <p class="text-sm text-gray-600">x {{ item.quantity }}</p>
         </div>
       </div>
-      <p class="font-semibold">${{ (parseFloat(item.product.price) * item.quantity).toFixed(2) }}</p>
+      <p class="font-semibold">${{ (+item.product.price * item.quantity).toFixed(2) }}</p>
     </div>
 
     <div class="my-4">
@@ -24,13 +24,17 @@
         <p class="text-gray-700">Subtotal</p>
         <p class="text-gray-700">${{ cartSubtotal.toFixed(2) }}</p>
       </div>
-      <div class="flex justify-between mb-2">
-        <p class="text-gray-700">Taxes (GST)</p>
-        <p class="text-gray-700">${{ taxes.toFixed(2) }}</p>
+      <div v-if="cartTotal < cartSubtotal" class="flex justify-between mb-2">
+        <p class="text-gray-700">Discount</p>
+        <p class="text-green-500">-${{ (cartSubtotal - cartTotal).toFixed(2) }}</p>
+      </div>
+      <div v-else-if="cartTotal > cartSubtotal" class="flex justify-between mb-2">
+        <p class="text-gray-700">Fees</p>
+        <p class="text-red-500">+${{ (cartTotal - cartSubtotal).toFixed(2) }}</p>
       </div>
       <div class="flex justify-between font-bold text-lg">
         <p>Total</p>
-        <p>AUD ${{ cartTotal.toFixed(2) }}</p>
+        <p>USD ${{ cartTotal.toFixed(2) }}</p>
       </div>
     </div>
   </UCard>
@@ -45,8 +49,18 @@ import type { Product } from '../types/product';
 const cartStore = useCartStore();
 const productStore = useProductStore();
 
-const shippingCost = 0; // Assuming no separate shipping cost from image
-const taxRate = 0.10; // Assuming 10% GST
+const cartTotal = computed(() => {
+  const total = cartStore.cart?.total ?? 0;
+  return typeof total === 'number' ? total : parseFloat(total) || 0;
+});
+
+const cartSubtotal = computed(() => {
+  return cartItemsWithProducts.value.reduce((total, item) => {
+    return total + (+item.product.price * item.quantity);
+  }, 0);
+});
+
+
 
 // Ensure products are loaded
 onMounted(async () => {
@@ -56,7 +70,7 @@ onMounted(async () => {
 });
 
 const cartItemsWithProducts = computed(() => {
-  return cartStore.cartItems.map(cartItem => {
+  return (cartStore.cart?.items ?? []).map(cartItem => {
     const product = productStore.products.find(p => p.id === cartItem.id);
     return {
       ...cartItem,
@@ -65,21 +79,5 @@ const cartItemsWithProducts = computed(() => {
   });
 });
 
-const cartSubtotal = computed(() => {
-  if (!Array.isArray(cartItemsWithProducts.value)) {
-    return 0;
-  }
-  return cartItemsWithProducts.value.reduce((total, item) => {
-    const price = parseFloat(item.product.price) || 0;
-    return total + (price * item.quantity);
-  }, 0);
-});
 
-const taxes = computed(() => {
-  return (cartSubtotal.value || 0) * taxRate;
-});
-
-const cartTotal = computed(() => {
-  return (cartSubtotal.value || 0) + (taxes.value || 0);
-});
 </script>

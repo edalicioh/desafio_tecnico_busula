@@ -68,7 +68,7 @@ export const useCartStore = defineStore('cartStore', {
         this.cartItems.push({
           id: product.id,
           quantity: 1,
-          subtotal: 0,
+          subtotal: product.price,
         })
       }
 
@@ -135,12 +135,12 @@ export const useCartStore = defineStore('cartStore', {
 
       try {
         const { $api } = useNuxtApp()
-        const response = await $api.post('/api/v1/cart/recalculate', {
-          sessionId: this.cart.sessionId,
+        const {data} = await $api.post(`/api/v1/cart/${this.cart.id}/recalculate`, {
           conditionId,
           installments,
         })
-        this.setCart(response.data.data)
+        console.log(data.data)
+        this.setCart(data.data)
       } catch (error) {
         console.error('Erro ao recalcular o total do carrinho:', error)
       }

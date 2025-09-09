@@ -17,9 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useCartStore } from '../store/cartStore'
 import { useProductStore } from '../store/productStore'
+import { useCheckoutStore } from '../store/checkoutStore'
 import CheckoutBillingAddress from '../components/CheckoutBillingAddress.vue'
 import CheckoutPayment from '../components/CheckoutPayment.vue'
 import CheckoutCartSummary from '../components/CheckoutCartSummary.vue'
@@ -27,9 +27,13 @@ import CheckoutPayButton from '../components/CheckoutPayButton.vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
+const checkoutStore = useCheckoutStore()
 
-onMounted(async () => {
+useAsyncData('checkout-data', async () => {
+  await checkoutStore.fetchPaymentMethods()
+  await checkoutStore.fetchPaymentConditions()
   await cartStore.getCart()
+
   if (productStore.products.length === 0) {
     await productStore.fetchProducts()
   }

@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
-import type { CheckoutState, BillingAddress, PaymentMethod, PaymentCondition, Order } from '~/types/checkout'
+import type { PaymentCondition } from '~/types/payment-condition'
+import type { PaymentMethod } from '~/types/payment-method'
+
+
 import { useCartStore } from './cartStore'
 import PaymentMethodEnum from '~/enums/payment-method'
 
@@ -9,10 +12,10 @@ export const useCheckoutStore = defineStore('checkoutStore', {
     paymentMethods: [] as PaymentMethod[],
     paymentConditions: [] as PaymentCondition[],
     installmentOptions: [] as  {
-    value: number;
-    label: string;
-    conditionId: number;
-}[]
+        value: number;
+        label: string;
+        conditionId: number;
+    }[]
   }),
 
   actions: {

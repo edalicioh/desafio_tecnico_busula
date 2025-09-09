@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { vMaska } from 'maska/vue'
 import { useCheckoutStore } from '~/store/checkoutStore'
 import { useCartStore } from '~/store/cartStore'
@@ -24,13 +24,17 @@ import { useCartStore } from '~/store/cartStore'
 const store = useCheckoutStore()
 const cartStore = useCartStore()
 
-const installments = ref<number | null>(null)
+const installmentOptions = computed(() => store.installmentOptions)
 
-const installmentOptions = store.installmentOptions
+const installments = ref(installmentOptions.value[0] ?? null)
+
+onMounted(() => {
+   cartStore.recalculateTotal(installments.value?.conditionId!, installments.value?.value!)
+})
 
 const onInstallmentChange = (value: number | null) => {
-  if (value) {
-    const selectedOption = installmentOptions.find(option => option.value === value)
+  if (value !== null && value !== undefined) {
+    const selectedOption = installmentOptions.value.find(option => option.value === value)
     if (selectedOption) {
       cartStore.recalculateTotal(selectedOption.conditionId, selectedOption.value)
     }
