@@ -12,8 +12,8 @@ This project consists of a Laravel backend and a Nuxt.js frontend, orchestrated 
 1.  **Clone the repository:**
 
     ```bash
-    git clone <repository-url>
-    cd <repository-folder>
+    git clone git@github.com:edalicioh/desafio_tecnico_busula.git
+    cd desafio_tecnico_busula
     ```
 
 2.  **Environment Files:**
